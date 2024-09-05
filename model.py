@@ -13,11 +13,11 @@ class OrderLine:
 class Batch:
     def __init__(
             self,
-            id: str,
+            reference: str,
             sku: str,
             batch_quantity: int,
             eta: Optional[date]):
-        self.id = id
+        self.reference = reference
         self.sku = sku
         self._batch_quantity = batch_quantity
         self._allocations = set()  # type: set[OrderLine]
@@ -27,13 +27,13 @@ class Batch:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Batch):
             return False
-        return other.id == self.id
+        return other.reference == self.reference
 
-    # Batch라는 객체는 id가 유일한 해쉬 값이며 이 id가 같다면 동등한 객체로 인식된다.
+    # Batch라는 객체는 reference가 유일한 해쉬 값이며 이 reference가 같다면 동등한 객체로 인식된다.
     # 자세한 사항은 https://docs.python.org/3/reference/datamodel.html#object.__hash__ 해당 docs 참조
     # 간단한 예제는 test_eq_hash.py로 구현
     def __hash__(self) -> int:
-        return hash(self.id)
+        return hash(self.reference)
 
     # Batch라는 객체를 sorted 할 수 있게 만든 매직 메서드, 날짜 순으로 비교한다.
     def __gt__(self, other):
@@ -68,6 +68,7 @@ class Batch:
 
 class OutOfStock(Exception):
     pass
+
 
 # 도메인 서비스에 대한 단독 함수
 def allocate(line: OrderLine, batches: list[Batch]) -> str:

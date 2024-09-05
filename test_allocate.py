@@ -1,6 +1,7 @@
 from datetime import datetime
-from chapter_01.model import Batch, OrderLine, allocate, OutOfStock
+from model import Batch, OrderLine, allocate, OutOfStock
 from pytest import raises
+
 
 def test_배치_리스트_eta가_없을_때_먼저_할당_되는_지_확인():
     batch = Batch('batch-001', 'clock', 100, eta=None)
